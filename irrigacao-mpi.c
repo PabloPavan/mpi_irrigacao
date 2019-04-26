@@ -138,9 +138,6 @@ int main(int argc, char *argv[])
 	if (proc == 0) /*mestre*/
 	{
 
-
-
-
 		evaporacao();
 		double evap1 = x[1][1];
 		double evap2 = x[2][1];
@@ -340,14 +337,9 @@ int main(int argc, char *argv[])
 			}
 		}  // end do for do kk
 
-
-
-	
 	} // end do master
 	
 	MPI_Finalize();
-
-
 
 	if (proc == 1) {
 		tempo2();
@@ -355,19 +347,6 @@ int main(int argc, char *argv[])
 	}
 	
 } //end main
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 //***************************************************** KA *******************************************************
