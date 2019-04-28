@@ -1,1 +1,0 @@
-gcc -o a tccII.c -lm 

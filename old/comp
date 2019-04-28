@@ -1,1 +1,0 @@
-cc -o /usr/lib/pvm3/bin/LINUX/$1 $1.c -I /usr/include/ -L /usr/lib/LINUX/ -lpvm3 -lm

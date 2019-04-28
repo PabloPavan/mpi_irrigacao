@@ -2,11 +2,10 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include "mpi.h"
+#include <mpi.h>
+#include <omp.h>
 
-#include "tempo.h"
-
-#define  L 32   // no. de pontos em r, varia com i
+#define  L 448   // no. de pontos em r, varia com i
 #define  M L  // no. de pontos em z, varia com j
 	
 	// TRANSPORTE DE AGUA NO SOLO EM COORDENDAS CILDRICAS 
@@ -24,9 +23,9 @@
 	
 	//--------DEFINICAO DA MALHA ----------
 	int nn=100;  //iteraes temporais, varia com k
-	int nc = 60;  //nmero de q testados
-	double R=0.15;   // raio do tubo,m
-	double h=0.33;   //altura do solo,m
+	int nc = 2048;  //nmero de q testados
+	double R=0.015;   // raio do tubo,m
+	double h=0.033;   //altura do solo,m
 	double dr;
 	double dz;
 	double dt=0.3; // horas
@@ -36,7 +35,7 @@
 	double T00;	
 
 	
-	//-----------curva de reteno de ua -----------
+	//-------x----curva de reteno de ua -----------
 	double a=0.467; //%0.674;%0.526;%;  % coeficiente do Psi na equao do potencial */
 	double m=0.934; //%0.768;%0.519;%;  % expoente na equao do potencial */
 	double n;	
@@ -113,6 +112,7 @@
 
 int main(int argc, char *argv[])
 {
+	double start = omp_get_wtime();
 			
 	dr=R/(L-1);
 	dz=h/(M-1);
@@ -133,10 +133,11 @@ int main(int argc, char *argv[])
 
 
 
-	tempo1();
-
 	if (proc == 0) /*mestre*/
 	{
+
+
+
 
 		evaporacao();
 		double evap1 = x[1][1];
@@ -152,7 +153,7 @@ int main(int argc, char *argv[])
 		
 		//Envia parametros (evaporacao, posicoes inicial e final)
 		for (patual = 1; patual <= (nProc-1); patual++){
-			printf(" \n\n enviou para comp %d", patual); 
+//			printf(" \n\n enviou para comp %d", patual); 
 //			startwtime = MPI_Wtime();
 //			printf("\n start clock time = %f\n",startwtime);	
 			pos_fim = tamanho + pos_fim;
@@ -337,16 +338,30 @@ int main(int argc, char *argv[])
 			}
 		}  // end do for do kk
 
+
+
+	
 	} // end do master
 	
 	MPI_Finalize();
 
-	if (proc == 1) {
-		tempo2();
-		tempoFinal("mili segundos", argv[0], MSGLOG);
-	}
-	
+	double end = omp_get_wtime();
+	if(proc == 0)
+		printf("%.5lf\n", end - start);
 } //end main
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 //***************************************************** KA *******************************************************

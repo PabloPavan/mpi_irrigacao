@@ -1,0 +1,22 @@
+#!/bin/sh
+#SBATCH --job-name=irrigacao
+#SBATCH --time=72:00:00
+#SBATCH --partition=draco
+#SBATCH --exclusive
+#SBATCH --nodes=7
+#SBATCH --ntasks-per-node=32
+#SBATCH --ntasks=224
+#SBATCH --cpus-per-task=1
+
+echo "Running on $SLURM_JOB_NODELIST - $SLURM_NTASKS tasks"
+
+mpicc irrigacao-mpi.c -fopenmp -lm -O2 2> compiler.log
+
+MACHINEFILE="nodes.$SLURM_JOB_ID"
+srun -l hostname | sort -n | awk '{print $2}' > $MACHINEFILE
+
+mpirun --mca btl ^openib --mca btl_tcp_if_include eno1 --bind-to none -np $SLURM_NTASKS -machinefile $MACHINEFILE ./a.out
+
+rm -f $MACHINEFILE
+
+echo "done"
