@@ -23,7 +23,7 @@
 	
 	//--------DEFINICAO DA MALHA ----------
 	int nn=100;  //iteraes temporais, varia com k
-	int nc = 2048;  //nmero de q testados
+	int nc = 3072;  //nmero de q testados
 	double R=0.015;   // raio do tubo,m
 	double h=0.033;   //altura do solo,m
 	double dr;
@@ -346,8 +346,10 @@ int main(int argc, char *argv[])
 	MPI_Finalize();
 
 	double end = omp_get_wtime();
-	if(proc == 0)
+	if(proc == 0){
+		printf("nc=%d\n", nc);
 		printf("%.5lf\n", end - start);
+	}
 } //end main
 
 

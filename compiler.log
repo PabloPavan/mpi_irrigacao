@@ -1,0 +1,9 @@
+irrigacao-mpi.c: In function 'evaporacao':
+cc1: warning: iteration 2u invokes undefined behavior [-Waggressive-loop-optimizations]
+irrigacao-mpi.c:559:2: note: containing loop
+  for (y13 = 1; y13 <=4; y13++){                    
+  ^
+cc1: warning: iteration 2u invokes undefined behavior [-Waggressive-loop-optimizations]
+irrigacao-mpi.c:435:2: note: containing loop
+  for (i=1; i <=nump; i++){
+  ^
